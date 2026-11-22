@@ -67,7 +67,7 @@ Num setor de produção, o supervisor precisa saber no fim do dia como cada linh
 ## Como rodar
 
 1. Baixe `Producao_Turnos.xlsx` e suba no Google Drive como **Planilhas Google**.
-2. No n8n, importe `Relatorio_de_turnos.json` e `erro_automacao.json` (menu **⋯ → Import from file**).
+2. No n8n, importe `workflows/Relatorio_de_turnos.json` e `workflows/erro_automacao.json` (menu **⋯ → Import from file**).
 3. Conecte as suas credenciais: **Google Sheets**, **OpenAI** e **Gmail**.
 4. No nó **Ler planilha**, escolha a sua cópia da planilha e a aba **Producao**.
 5. Nos nós de Gmail, troque `seu-email@exemplo.com` pelo seu e-mail.

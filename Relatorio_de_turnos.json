@@ -1,0 +1,450 @@
+{
+  "name": "Relatório de turnos",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "d777a3ba-e036-4b9e-a926-a3cf48862c98",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "sendTo": "seu-email@exemplo.com",
+        "subject": "=✅ Produção normal – Relatório de turno –  {{ $('Ler planilha').first().json.Data }}",
+        "emailType": "text",
+        "message": "={{ $json.output[0].content[0].text}}\n\n----------------------------------------\n\nO relatório foi gerado automaticamente pelo n8n com IA. A planilha completa foi anexada. \nOs dados dessa planilha são inteiramente fictícios. ",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        64
+      ],
+      "id": "01b19f9d-7885-4b4f-a3ad-c9d35fdf34db",
+      "name": "Gmail Normal",
+      "webhookId": "606f08c8-a777-436e-916a-e806c0613a87",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qU9Vb69tx4xrMGG8",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "seu-email@exemplo.com",
+        "subject": "=⚠️ ALERTA DE PRODUÇÃO – Relatório de turno –  {{ $('Ler planilha').first().json.Data }}",
+        "emailType": "text",
+        "message": "={{ $json.output[0].content[0].text}} \n\n----------------------------------------\n\nO relatório foi gerado automaticamente pelo n8n com IA. A planilha completa foi anexada. \nOs dados dessa planilha são inteiramente fictícios. ",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        -112
+      ],
+      "id": "821bfcae-87a2-4a07-a2cd-690f644f7735",
+      "name": "Gmail Alerta",
+      "webhookId": "606f08c8-a777-436e-916a-e806c0613a87",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qU9Vb69tx4xrMGG8",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1g17RR6KzHylW0kdTMsYNiqSN2xyG05W7ZL0Mnq5ViNk",
+          "mode": "list",
+          "cachedResultName": "Producao_Turnos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1g17RR6KzHylW0kdTMsYNiqSN2xyG05W7ZL0Mnq5ViNk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Producao",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1g17RR6KzHylW0kdTMsYNiqSN2xyG05W7ZL0Mnq5ViNk/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Ultimo_dia",
+              "lookupValue": "SIM"
+            }
+          ]
+        },
+        "options": {
+          "outputFormatting": {
+            "values": {
+              "general": "FORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        128,
+        -16
+      ],
+      "id": "0a5d3a82-ad71-4114-8aca-5f31f7f502c5",
+      "name": "Ler planilha",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pzydgakzwRepn5nC",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "row_number, Ultimo_dia",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        304,
+        64
+      ],
+      "id": "b6d720bf-9a4a-4021-9c29-5cb981243b83",
+      "name": "Editar campos"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {
+          "fileName": "Planilha de turnos.xlsx"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        80
+      ],
+      "id": "a2e28929-c7ee-4a95-b7ac-37aadae204e1",
+      "name": "Converter sheets"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Você é um analista de produção de uma fábrica. \n\nResuma como foi a linha de produção de cada \"Turno\" \n\nLimite - Faça um resumo básico. Separe os turnos ( manhã e tarde) em blocos separados, com no máximo 2 frases de resumo em cada um. Para fazer a separação use uuma quebra de linhas, sem negrito, asterisco ou caracter especial dentro do email. Para saber se um turno está em alerta, use SOMENTE a coluna Status. Não decida pelos números de eficiência ou refugo. Se nenhum turno estiver com Status ALERTA, não fale em alerta. Quando for se referir a eficiência e refugo, sempre use em formato de porcentagem, com uma casa decimal\n\nSe houver algum turno com Status ALERTA, comece o e-mail com este bloco, uma linha por turno em alerta:\nATENÇÃO\n[Linha] – Turno [Turno]: eficiência [Eficiencia], refugo [Refugo_pct], parada [Parada_min] min. Responsável: [Responsavel].\nSe não houver nenhum turno em ALERTA, não escreva esse bloco e comece direto pelo resumo.\n\nExemplo - Manhã - Produzido [O quanto o turno produziu em kg] de [meta] em kg ([% da meta]). Refugo [Refugo em kg, quanto foi desperdiçado] ([% de refugo]). Paradas [Quantos minutos ficou parado no total do turno]. Destaque: [principal problema para o não atingimento da meta, exemplo - \"Parada de 15 min na C12 em 17/12\" ou \"sem problemas\"].\n          \nTarde - Produzido [O quanto o turno produziu em kg] de [meta] ([% da meta]). Refugo [Refugo em kg, quanto foi desperdiçado] ([% de refugo]). Paradas [Quantos minutos ficou parado no total do turno]. Destaque: [principal problema para o não atingimento da meta, exemplo - \"Parada de 15 min na C12 em 17/12\" ou \"sem problemas\"].\n\nDados - {{ JSON.stringify($json.data) }} \n"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        512,
+        -144
+      ],
+      "id": "f837976a-21f8-47fa-b862-e7392ba3a7a1",
+      "name": "Resumo IA",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "- Inteligência Artificial aplicada na analise\n",
+        "height": 192,
+        "width": 256,
+        "color": "#726565"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        496,
+        -208
+      ],
+      "id": "218dcd2a-3af9-4e2b-abd7-95018816ede7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "- Decisão",
+        "height": 208,
+        "width": 192,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -64
+      ],
+      "id": "e74d6b5a-d8d7-4a6a-b223-a2d14a3ee1eb",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "- Junção dos elementos\n\n",
+        "height": 240,
+        "width": 160,
+        "color": "#CBB7F0"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        848,
+        -80
+      ],
+      "id": "44bda4e4-f0d9-47e9-9b77-9c38ead0ebc3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 19
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -64,
+        -16
+      ],
+      "id": "e532f4ae-afcc-4672-ba33-3491a9e2c6a3",
+      "name": "Gatilho diário"
+    },
+    {
+      "parameters": {
+        "content": "- Anexo: gera a planilha .xlsx do dia\n",
+        "height": 224,
+        "width": 192,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        528,
+        16
+      ],
+      "id": "a6b3abf3-4e6f-437e-aea1-fecaf83a202c",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "e043e934-3293-43ea-9752-cdbca0ed67ae",
+              "leftValue": "={{ JSON.stringify($('Juntar turnos da planilha').item.json.data) }}",
+              "rightValue": "ALERTA",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1088,
+        -16
+      ],
+      "id": "d4ff7bb9-329f-436d-ad63-9559eefddc70",
+      "name": "Algum turno em ALERTA ?"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        320,
+        -144
+      ],
+      "id": "96ed283f-285e-40b9-81df-c2eb9c0b8444",
+      "name": "Juntar turnos da planilha"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Algum turno em ALERTA ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler planilha": {
+      "main": [
+        [
+          {
+            "node": "Juntar turnos da planilha",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Editar campos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Editar campos": {
+      "main": [
+        [
+          {
+            "node": "Converter sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter sheets": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Resumo IA": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gatilho diário": {
+      "main": [
+        [
+          {
+            "node": "Ler planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Algum turno em ALERTA ?": {
+      "main": [
+        [
+          {
+            "node": "Gmail Alerta",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Gmail Normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Juntar turnos da planilha": {
+      "main": [
+        [
+          {
+            "node": "Resumo IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "I5x5ZbQcUfwRFAL6"
+  },
+  "versionId": "32994e42-0168-4008-9b65-9a419a881ad4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e66f49de0bd3532e759bb8b4c69295267d373fe0718b10876a3993e462792bcb"
+  },
+  "nodeGroups": [],
+  "id": "RsDe3xjKF52VMJND",
+  "tags": []
+}

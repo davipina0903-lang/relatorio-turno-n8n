@@ -1,0 +1,69 @@
+{
+  "name": "erro automação",
+  "nodes": [
+    {
+      "parameters": {
+        "sendTo": "seu-email@exemplo.com",
+        "subject": "⚠️ AVISO! Falha na automação ",
+        "emailType": "text",
+        "message": "={{ $json.workflow.name }} {{ $json.execution.error.message }} {{ $json.execution.url }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        -48
+      ],
+      "id": "4ca56735-9f6a-46ce-b007-e6744f281abd",
+      "name": "Mensagem de erro",
+      "webhookId": "b55a4c27-7f34-49fe-bdd8-e9414f92a7a0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qU9Vb69tx4xrMGG8",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -48
+      ],
+      "id": "7d2219ea-195b-44d7-a0a4-ed0c52b8478e",
+      "name": "Gatilho de erro"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gatilho de erro": {
+      "main": [
+        [
+          {
+            "node": "Mensagem de erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5140e484-845c-439a-a81b-409add021ab7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e66f49de0bd3532e759bb8b4c69295267d373fe0718b10876a3993e462792bcb"
+  },
+  "nodeGroups": [],
+  "id": "I5x5ZbQcUfwRFAL6",
+  "tags": []
+}

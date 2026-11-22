@@ -89,7 +89,7 @@ Num setor de produção, o supervisor precisa saber no fim do dia como cada linh
 
 ## Demonstração
 
-Vídeo de demonstração: em breve.
+https://github.com/user-attachments/assets/586fa9da-be30-4b75-8ce2-747bca92c0c9
 
 ---
 
